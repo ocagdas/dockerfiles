@@ -12,6 +12,7 @@
 #	--device /dev/snd \ # so we have sound
 #   --device /dev/dri \
 #	-v /dev/shm:/dev/shm \
+#	-e URL \
 #	--name chrome \
 #	jess/chrome
 #
@@ -62,10 +63,11 @@ RUN groupadd -r chrome && useradd -r -g chrome -G audio,video chrome \
     && mkdir -p /home/chrome/Downloads && chown -R chrome:chrome /home/chrome
 
 COPY local.conf /etc/fonts/local.conf
+COPY browser_runner.sh /home/chrome/.
 
 # Run Chrome as non privileged user
 USER chrome
 
 # Autorun chrome
-ENTRYPOINT [ "google-chrome" ]
-CMD [ "--user-data-dir=/data" ]
+ENTRYPOINT [ "/home/chrome/browser_runner.sh" ]
+CMD [ "" ]
